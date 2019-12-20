@@ -8,10 +8,13 @@
     <script src="stomp.js"></script>
 </head>
 <body>
-<br>
-<br>
-<h1 id="msg">aaa</h1>
-<p id="send">你好</p>
+
+
+    <textarea id="message" rows="3" cols="20"></textarea>
+    <input id="send" type="button"  value="发送消息" >
+
+
+
 <script>
     var sockJS= new SockJS("http://localhost:8080/socket");
     var stompClient = new Stomp.over(sockJS);
@@ -22,15 +25,16 @@
         })
     })
     $("#send").click(function(){
-        alert("ok");
-        stompClient.send("/message",{},JSON.stringify({
-            name:"huyu",
-            message:"asdasd",
-            toName:"zhangsan"
-        }))
-
-
-    })
+        if($.trim($("#message").val())==''){
+            console.log("空消息");
+        }else {
+            stompClient.send("/message", {}, JSON.stringify({
+                name: "huyu",
+                message: $("#message").val(),
+                toName: "zhangsan"
+            }));
+        }
+     })
 
 </script>
 </body>
