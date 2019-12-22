@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="com.huyu.websocket.mapper.MyMapper">
+
+    <resultMap id="result" type="com.huyu.websocket.entity.Student">
+        <id column="s_id"  property="sId" />
+        <result column="s_name" property="sName"/>
+        <result column="s_birth" property="sBirth"/>
+        <result column="s_sex" property="sSex"/>
+        <association property="score" javaType="com.huyu.websocket.entity.Score">
+            <id column="s_id" property="sId"/>
+            <result column="s_score" property="sScore"/>
+            <result column="c_id" property="cId"/>
+        </association>
+    </resultMap>
+    <select id="fuck" resultMap="result">
+        SELECT * FROM student where s_id='01';
+    </select>
+
+    <select id="fuckYou" resultMap="result">
+        SELECT s.*,c.* FROM student s LEFT JOIN score c ON s.s_id=c.c_id WHERE s.s_id='01';
+
+    </select>
+    <select id="selectAllStudent" resultMap="result">
+        SELECT
+        *
+        FROM
+        student;
+
+    </select>
+</mapper>

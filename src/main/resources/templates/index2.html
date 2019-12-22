@@ -6,10 +6,22 @@
     <script src="jquery.js"></script>
     <script src="sockjs.js"></script>
     <script src="stomp.js"></script>
+    <style>
+        .talk_con{
+            width:600px;
+            height:500px;
+            border:1px solid #666;
+            margin:50px auto 0;
+            background:#f9f9f9;
+        }
+    </style>
 </head>
 <body>
+    <div class="talk_con">
+    </div>
+    <div class="student">
 
-
+    </div>
     <textarea id="message" rows="3" cols="20"></textarea>
     <input id="send" type="button"  value="发送消息" >
 
@@ -20,8 +32,9 @@
     var stompClient = new Stomp.over(sockJS);
     stompClient.connect({},function (data) {
         stompClient.subscribe("/user/HuYu/sendMessage",function (response) {
-            console.log(response.body);
-
+            var message = response.body;
+            console.log(message);
+            $(".talk_con").append("<div>"+ message +"</div>")
         })
     })
     $("#send").click(function(){
@@ -35,6 +48,22 @@
             }));
         }
      })
+
+</script>
+<script>
+    $(document).ready($.ajax({
+        "url":"student",
+        "data":"",
+        "type":"post",
+        "dataType":"json",
+        "success":function (json) {
+            $.each(json,function (key,value) {
+                $(".student").append("<div>"+"名字:" + value.sName+ "分数:"+value.sId+ + "</div>")
+            })
+
+        }
+
+    }))
 
 </script>
 </body>

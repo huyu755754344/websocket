@@ -10,12 +10,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class sendjob {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
-    //@Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 5000)
     public void helloWord(){
         simpMessagingTemplate.convertAndSend("/server/sendMessage","helloWord");
     }
 
-    //@Scheduled(fixedRate = 2000)
+    @Scheduled(fixedRate = 2000)
     public void helloHuYu(){
         simpMessagingTemplate.convertAndSendToUser("HuYu","sendMessage","HelloHuYu");
     }
