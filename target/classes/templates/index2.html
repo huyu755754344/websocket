@@ -14,6 +14,9 @@
             margin:50px auto 0;
             background:#f9f9f9;
         }
+        .myMessage{
+            color: brown;
+        }
     </style>
 </head>
 <body>
@@ -38,14 +41,17 @@
         })
     })
     $("#send").click(function(){
-        if($.trim($("#message").val())==''){
+        if($.trim($("#message").val())===''){
             console.log("空消息");
         }else {
+
             stompClient.send("/message", {}, JSON.stringify({
                 name: "huyu",
                 message: $("#message").val(),
                 toName: "zhangsan"
             }));
+            $(".talk_con").append("<div class='myMessage'>"+$("#message").val()+"</div>");
+            $("#message").val('');
         }
      })
 
