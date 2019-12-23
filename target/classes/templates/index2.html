@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hello</title>
+    <script src="jquery.js"></script>
+    <script src="sockjs.js"></script>
+    <script src="stomp.js"></script>
+    <style>
+        .talk_con{
+            width:600px;
+            height:500px;
+            border:1px solid #666;
+            margin:50px auto 0;
+            background:#f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="talk_con">
+    </div>
+    <div class="student">
+
+    </div>
+    <textarea id="message" rows="3" cols="20"></textarea>
+    <input id="send" type="button"  value="发送消息" >
+
+
+
+<script>
+    var sockJS= new SockJS("http://localhost:8080/socket");
+    var stompClient = new Stomp.over(sockJS);
+    stompClient.connect({},function (data) {
+        stompClient.subscribe("/user/HuYu/sendMessage",function (response) {
+            var message = response.body;
+            console.log(message);
+            $(".talk_con").append("<div>"+ message +"</div>")
+        })
+    })
+    $("#send").click(function(){
+        if($.trim($("#message").val())==''){
+            console.log("空消息");
+        }else {
+            stompClient.send("/message", {}, JSON.stringify({
+                name: "huyu",
+                message: $("#message").val(),
+                toName: "zhangsan"
+            }));
+        }
+     })
+
+</script>
+<script>
+    function myAlter(info){
+        var $name = info.find("span:first-child").text();
+        var $id = info.find(":nth-child(2)").text();
+        alert($id);
+
+
+    }
+    $(document).ready($.ajax({
+        "url":"student",
+        "data":"",
+        "type":"post",
+        "dataType":"json",
+        "success":function (json) {
+            $.each(json,function (key,value) {
+
+                var student = $("<div onclick='myAlter($(this))'></div>");
+                student.append("<span>"+value.sName+"</span>");
+                student.append("<span>"+value.sId+"</span>");
+                $(".student").append(student);
+            })
+
+        }
+
+    }))
+
+</script>
+</body>
+</html>
